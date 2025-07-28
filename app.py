@@ -205,7 +205,7 @@ st.markdown("""
         .brand-tag {
             display: block;
             margin: 0 auto 0.1rem auto;
-            height: 150px;
+            height: 250px;
         }
 
         @media screen and (max-width: 768px) {
