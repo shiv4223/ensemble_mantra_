@@ -231,7 +231,7 @@ st.markdown("""
             }
 
             .brand-tag {
-                height: 30px;
+                height: 150px;
             }
         }
     </style>
