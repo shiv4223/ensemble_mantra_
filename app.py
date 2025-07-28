@@ -15,16 +15,27 @@ def get_base64_image(image_path):
     with open(image_path, "rb") as img_file:
         return base64.b64encode(img_file.read()).decode()
 
-# --------- CSS STYLES ---------  #e6b3d1;
+# --------- CSS STYLES ---------
 st.markdown("""
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital@1&display=swap');
 
         html, body, [data-testid="stApp"] {
-            background-color: #ffffff;
             font-family: 'Open Sans', sans-serif;
+            background-color: #ffffff;
             color: #111;
         }
+              .tag-light {
+                    display: block;
+                    height: 250px;
+                    margin: 0 auto 0.1rem auto;
+                }
+
+                .tag-dark {
+                    display: none;
+                    height: 250px;
+                    margin: 0 auto 0.1rem auto;
+                }
 
         @media (prefers-color-scheme: dark) {
             html, body, [data-testid="stApp"] {
@@ -32,42 +43,53 @@ st.markdown("""
                 color: #f0f0f0;
             }
 
+                @media (prefers-color-scheme: dark) {
+                    .tag-light {
+                        display: none;
+                    }
+
+                    .tag-dark {
+                        display: block;
+                    }
+                }
+
+
             .title-font {
-                color: #e6b3d1; 
-            }
+            color: #FFFFFF !important;
+        }
+
+            .collection-title {
+            color: #f0f0f0 !important;
+        }
 
             .subtitle {
-                color: #cccccc;
+                color: #cccccc !important;
             }
 
             .desc-container {
-                color: #dddddd;
+                color: #dddddd !important;;
                 border-top: 1px solid #444;
             }
 
-            .collection-title {
-                color: #eeeeee;
-            }
-
             .whatsapp-btn {
-                background-color: #823c6e;
+                background-color: #1e1e1e !important;;
                 color: #fff;
             }
 
             .whatsapp-btn:hover {
-                background-color: #a85c8f;
+                background-color: #a85c8f !important;;
             }
 
             .footer-section {
-                background-color: #1e1e1e;
+                background-color: #1e1e1e !important;;
             }
 
             .footer {
-                color: #cccccc;
+                color: #cccccc !important;;
             }
 
             .social-links a {
-                color: #89bfff;
+                color: #89bfff !important;;
             }
 
             .slider img {
@@ -205,7 +227,7 @@ st.markdown("""
         .brand-tag {
             display: block;
             margin: 0 auto 0.1rem auto;
-            height: 250px;
+            height: 150px;
         }
 
         @media screen and (max-width: 768px) {
@@ -231,7 +253,7 @@ st.markdown("""
             }
 
             .brand-tag {
-                height: 150px;
+                height: 30px;
             }
         }
     </style>
@@ -239,8 +261,17 @@ st.markdown("""
 
 # ============ PAGE HEADER ============
 def render_header():
-    if os.path.exists("data/tag_updated.png"):
-        st.markdown(f'<img class="brand-tag" src="data:image/jpeg;base64,{get_base64_image("data/tag_updated.png")}" />', unsafe_allow_html=True)
+    tag_light = "data/tag_updated.png"
+    tag_dark = "data/tag.jpg"
+
+    if os.path.exists(tag_light) and os.path.exists(tag_dark):
+        st.markdown(f"""
+            <div class="tag-container">
+                <img class="tag-light" src="data:image/png;base64,{get_base64_image(tag_light)}" />
+                <img class="tag-dark" src="data:image/png;base64,{get_base64_image(tag_dark)}" />
+            </div>
+        """, unsafe_allow_html=True)
+
 
 # ============ HOME PAGE ============
 if page == "Home":
@@ -248,7 +279,6 @@ if page == "Home":
     st.markdown('<div class="title-font">Ensemble Mantra Boutique</div>', unsafe_allow_html=True)
     st.markdown('<div class="subtitle">Where Elegance Meets Tradition</div>', unsafe_allow_html=True)
 
-    # SLIDER
     slider_folder = "data/slider"
     if os.path.exists(slider_folder):
         slider_images = sorted([f for f in os.listdir(slider_folder) if f.lower().endswith(('.jpg', '.jpeg', '.png'))])
@@ -260,15 +290,9 @@ if page == "Home":
                 slider_html += f'<img src="data:image/jpeg;base64,{encoded_image}" />'
             slider_html += '</div></div>'
             st.markdown(slider_html, unsafe_allow_html=True)
-        else:
-            st.warning("No slider images found.")
-    else:
-        st.error("Missing folder: data/slider")
 
-    # COLLECTION TITLE
     st.markdown('<div class="collection-title">Our Latest Collection</div>', unsafe_allow_html=True)
 
-    # IMAGE GALLERY
     with open("data/descriptions.json", "r") as f:
         descriptions = json.load(f)
 
@@ -290,7 +314,6 @@ if page == "Home":
                     )
                     st.image(image, use_container_width=True)
 
-    # WHATSAPP BUTTON
     st.markdown("""
         <a href="https://wa.me/917529016888" target="_blank" class="whatsapp-btn">
             <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" />
@@ -298,7 +321,6 @@ if page == "Home":
         </a>
     """, unsafe_allow_html=True)
 
-    # FOOTER
     st.markdown("""
         <div class="footer-section">
             <div class="footer">
@@ -323,7 +345,6 @@ if page == "Home":
         </div>
     """, unsafe_allow_html=True)
 
-# ============ INSTAGRAM FEED ============
 elif page == "Instagram Feed":
     render_header()
     st.markdown('<div class="title-font">Instagram Feed</div>', unsafe_allow_html=True)
